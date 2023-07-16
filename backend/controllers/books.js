@@ -20,7 +20,7 @@ exports.getAllBooks = (req, res, next) => {
             });
             res.status(200).json(formattedBooks);
         })
-        .catch((err) => { 
+        .catch((err) => {
             console.log(err);
             res.status(500).json({ error: "Une erreur s'est produite lors de la récupération des livres." });
         });
@@ -32,7 +32,6 @@ exports.getBestRating = (req, res) => {
 
             const bestRatingsBooks = books.slice(0, 3);
             res.json(bestRatingsBooks);
-
         })
         .catch(err => res.json(err));
 }
