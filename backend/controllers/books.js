@@ -62,7 +62,7 @@ exports.createBook = (req, res, next) => {
     const { book } = req.body
     const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     const parsedBook = JSON.parse(book)
-    console.log("GRADE", parsedBook.grade)
+
     new Book({
         userId,
         title: parsedBook.title,
@@ -139,8 +139,6 @@ exports.modifyBooks = (req, res) => {
             res.status(500).json({ message: 'Erreur lors de la récupération du livre.' });
         });
 };
-
-
 
 
 exports.deleteBook = (req, res) => {
