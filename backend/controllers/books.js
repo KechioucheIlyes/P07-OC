@@ -55,12 +55,10 @@ exports.getBookbyId = (req, res) => {
 };
 
 
-
-
 exports.createBook = (req, res, next) => {
     const userId = req.auth.userId
     const { book } = req.body
-    const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    const imageUrl = `${req.protocol}://${req.get('host')}/${req.file.path}`
     const parsedBook = JSON.parse(book)
 
     new Book({
@@ -164,6 +162,7 @@ exports.deleteBook = (req, res) => {
                     console.log("Fichier supprimé avec succès !");
                 }
             });
+
         })
         .catch(err => console.log(err));
 }
