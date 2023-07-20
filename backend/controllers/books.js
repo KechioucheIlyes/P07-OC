@@ -1,7 +1,8 @@
 
 const express = require('express');
 const Book = require("../model/book")
-
+const fs = require("fs")
+const path = require("path")
 
 exports.getAllBooks = (req, res, next) => {
     Book.find()
@@ -32,6 +33,7 @@ exports.getBestRating = (req, res) => {
 
             const bestRatingsBooks = books.slice(0, 3);
             res.json(bestRatingsBooks);
+
         })
         .catch(err => res.json(err));
 }
@@ -41,13 +43,8 @@ exports.getBookbyId = (req, res) => {
 
     Book.findOne({ _id: bookId })
         .then(book => {
-
-
             res.status(200).json(book);
             console.log(book.ratings)
-
-
-
         })
         .catch(err => {
 
@@ -147,19 +144,39 @@ exports.modifyBooks = (req, res) => {
 
 
 exports.deleteBook = (req, res) => {
-    const bookId = req.params.id
-
+    const bookId = req.params.id;
 
     Book.findByIdAndRemove(bookId)
-        .then(result => {
+        .then(book => {
+            if (!book) {
+                res.status(404).json({ message: "Livre introuvable !" });
+                return;
+            }
 
-            res.status(200).json({ message: "Livre supprimé avec succes !" })
-            console.log("Livre supprimé avec succes !", result)
+            const imagePath = path.join(__dirname, '..', book.imageUrl.split('http://localhost:4000/')[1]);
 
+            console.log("IMAGE PATH:", imagePath)
+            console.log("BOOK PATH:", book.imageUrl.split('http://localhost:4000/')[1])
+            res.status(200).json({ message: "Livre supprimé avec succès !" });
+
+            fs.rm(imagePath, (err) => {
+                if (err) {
+                    console.log("Un problème est survenu lors de la suppression du fichier", err);
+                } else {
+                    console.log("Fichier supprimé avec succès !");
+                }
+            });
         })
-        .catch(err => console.log(err))
-
+        .catch(err => console.log(err));
 }
+
+
+
+
+
+
+
+
 
 exports.ratingById = (req, res) => {
     console.log(req.params.id)
