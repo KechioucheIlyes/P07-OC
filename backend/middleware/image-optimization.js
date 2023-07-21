@@ -2,7 +2,7 @@ const sharp = require('sharp');
 const fs = require("fs")
 const imageOptimizationMiddleware = (req, res, next) => {
     if (!req.file) {
-        console.log('LOL')
+    
         return next();
     }
 
