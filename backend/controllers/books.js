@@ -29,10 +29,13 @@ exports.getAllBooks = (req, res, next) => {
 exports.getBestRating = (req, res) => {
 
     Book.find()
+        .sort({ averageRating: -1 })
+        .limit(3)
         .then(books => {
 
             const bestRatingsBooks = books.slice(0, 3);
-            res.json(bestRatingsBooks);
+
+            res.json(books);
 
         })
         .catch(err => res.json(err));
@@ -72,9 +75,10 @@ exports.createBook = (req, res, next) => {
         imageUrl
     })
         .save()
-        .then(() => {
+        .then((book) => {
 
             res.status(201).json({ message: "Livre enregistré avec succes !" })
+            console.log(book)
 
         })
         .catch(err => console.log(err))
